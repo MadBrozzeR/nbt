@@ -25,59 +25,60 @@ const Type = {
   },
   Byte: function (reader, name) {
     this.value = reader.readUIntBE(1);
-    this.name = name;
+    (name === undefined) || (this.name = name);
   },
   Short: function (reader, name) {
     this.value = reader.readUIntBE(2);
-    this.name = name;
+    (name === undefined) || (this.name = name);
   },
   Int: function (reader, name) {
     this.value = reader.readUIntBE(4);
-    this.name = name;
+    (name === undefined) || (this.name = name);
   },
   Long: function (reader, name) {
     this.value = reader.readUIntBE(4) * 0x100000000 + reader.readUIntBE(4);
-    this.name = name;
+    (name === undefined) || (this.name = name);
   },
   Float: function (reader, name) {
     this.value = reader.readFloat();
-    this.name = name;
+    (name === undefined) || (this.name = name);
   },
   Double: function (reader, name) {
     this.value = reader.readDouble();
-    this.name = name;
+    (name === undefined) || (this.name = name);
   },
   ByteArray: function (reader, name) {
     this.value = getListOfType(reader, 1);
-    this.name = name;
+    (name === undefined) || (this.name = name);
   },
   String: function (reader, name) {
     this.value = reader.read(reader.readUIntBE(2));
-    this.name = name;
+    (name === undefined) || (this.name = name);
   },
   List: function (reader, name) {
     const type = reader.readUIntBE(1);
     this.value = getListOfType(reader, type);
-    this.name = name;
+    (name === undefined) || (this.name = name);
   },
   Compound: function (reader, fieldName) {
     this.value = {};
-    this.name = fieldName;
+    (fieldName === undefined) || (this.name = fieldName);
     let type = reader.readUIntBE(1);
     let name;
 
     while (type !== 0) {
-      this.value[reader.read(reader.readUIntBE(2))] = getType(type)(reader);
+      name = reader.read(reader.readUIntBE(2));
+      this.value[name] = getType(type)(reader, name);
       type = reader.readUIntBE(1);
     }
   },
   IntArray: function (reader, name) {
     this.value = getListOfType(reader, 3);
-    this.name = name;
+    (name === undefined) || (this.name = name);
   },
   LongArray: function (reader, name) {
     this.value = getListOfType(reader, 4);
-    this.name = name;
+    (name === undefined) || (this.name = name);
   }
 };
 
@@ -190,3 +191,4 @@ module.exports.read = function read (buffer) {
 
   return getType(type)(reader, name);
 }
+
