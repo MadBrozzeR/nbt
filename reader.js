@@ -40,11 +40,11 @@ const Type = {
     (name === undefined) || (this.name = name);
   },
   Float: function (reader, name) {
-    this.value = reader.readFloat();
+    this.value = reader.readFloatBE();
     (name === undefined) || (this.name = name);
   },
   Double: function (reader, name) {
-    this.value = reader.readDouble();
+    this.value = reader.readDoubleBE();
     (name === undefined) || (this.name = name);
   },
   ByteArray: function (reader, name) {
